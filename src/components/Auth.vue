@@ -1,21 +1,27 @@
 <template>
-    <form class="row flex-center flex" @submit.prevent="handleLogin">
-      <div class="col-6 form-widget">
-        <h1 class="header">Supabase + Vue 3</h1>
-        <p class="description">Sign in via magic link with your email below</p>
-        <div>
-          <input class="inputField" type="email" placeholder="Your email" v-model="email" />
-        </div>
-        <div>
-          <input
-            type="submit"
-            class="button block"
+    <v-card>
+      <v-card-title>
+        Sign in via magic link with your email below
+      </v-card-title>
+      <v-card-text>
+        <form @submit.prevent="handleLogin">
+          <v-text-field
+              label="E-mail"
+              v-model="email"
+              prepend-icon="mdi-email"
+          ></v-text-field>
+        </form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+            color="primary"
             :value="loading ? 'Loading' : 'Send magic link'"
             :disabled="loading"
-          />
-        </div>
-      </div>
-    </form>
+            @click="handleLogin"
+        >Log in</v-btn>
+      </v-card-actions>
+    </v-card>
 </template>
 <script setup>
   import { ref } from 'vue'

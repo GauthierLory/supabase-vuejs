@@ -50,28 +50,17 @@
 </script>
 
 <template>
-  <div>
-    <img
+  <v-img
+      class="ml-9 mb-6"
       v-if="src"
       :src="src"
       alt="Avatar"
-      class="avatar image"
       :style="{ height: size + 'em', width: size + 'em' }"
-    />
-    <div v-else class="avatar no-image" :style="{ height: size + 'em', width: size + 'em' }" />
-
-    <div :style="{ width: size + 'em' }">
-      <label class="button primary block" for="single">
-        {{ uploading ? "Uploading ..." : "Upload" }}
-      </label>
-      <input
-        style="visibility: hidden; position: absolute"
-        type="file"
-        id="single"
-        accept="image/*"
+  />
+    <v-file-input
+        label="Avatar"
         @change="uploadAvatar"
         :disabled="uploading"
-      />
-    </div>
-  </div>
+        accept="image/*">
+    </v-file-input>
 </template>

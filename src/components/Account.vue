@@ -63,46 +63,59 @@
     }
   }
 
-  async function signOut() {
-    try {
-      loading.value = true
-      let { error } = await supabase.auth.signOut()
-      if (error) throw error
-    } catch (error) {
-      alert(error.message)
-    } finally {
-      loading.value = false
-    }
-  }
 </script>
 
 <template>
-  <form class="form-widget" @submit.prevent="updateProfile">
-    <Avatar v-model:path="avatar_url" @upload="updateProfile" size="10" />
-    <div>
-      <label for="email">Email</label>
-      <input id="email" type="text" :value="session.user.email" disabled />
-    </div>
-    <div>
-      <label for="username">Name</label>
-      <input id="username" type="text" v-model="username" />
-    </div>
-    <div>
-      <label for="website">Website</label>
-      <input id="website" type="website" v-model="website" />
-    </div>
+  <v-card
+      variant="outlined"
+      :loading="loading">
 
-    <div>
-      <input
-        type="submit"
-        class="button primary block"
-        :value="loading ? 'Loading ...' : 'Update'"
-        :disabled="loading"
-      />
-    </div>
+    <template v-slot:loader="{ isActive }">
+      <v-progress-linear
+          :active="isActive"
+          color="primary"
+          height="4"
+          indeterminate
+      ></v-progress-linear>
+    </template>
 
-    <div>
-      <button class="button block" @click="signOut" :disabled="loading">Sign Out</button>
-    </div>
-  </form>
+  <v-card-title>
+    Update profile
+  </v-card-title>
+    <v-card-text>
+      <v-form
+          @submit.prevent="updateProfile"
+      >
+            <Avatar v-model:path="avatar_url" @upload="updateProfile" size="10" />
+            <v-text-field
+                disabled
+                label="E-mail"
+                v-model="session.user.email"
+                prepend-icon="mdi-email"
+            ></v-text-field>
+            <v-text-field
+                v-model="username"
+                label="Name"
+                prepend-icon="mdi-account"
+            ></v-text-field>
+            <v-text-field
+                v-model="website"
+                label="Website"
+                prepend-icon="mdi-web"
+            ></v-text-field>
+      </v-form>
+
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn
+          color="primary"
+          :value="loading ? 'Loading ...' : 'Update'"
+          :disabled="loading"
+          @click="updateProfile"
+      >
+        Update
+      </v-btn>
+    </v-card-actions>
+  </v-card>
 </template>

@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mdi/font": "5.9.55",
     "@supabase/supabase-js": "^2.0.5",
     "vue": "^3.2.41",
     "vuetify": "^3.0.0"
