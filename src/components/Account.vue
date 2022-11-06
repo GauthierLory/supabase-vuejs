@@ -66,26 +66,27 @@
 </script>
 
 <template>
-  <v-card
-      variant="outlined"
-      :loading="loading">
+  <v-row>
+    <v-col>
+      <v-card
+          :loading="loading">
 
-    <template v-slot:loader="{ isActive }">
-      <v-progress-linear
-          :active="isActive"
-          color="primary"
-          height="4"
-          indeterminate
-      ></v-progress-linear>
-    </template>
+        <template v-slot:loader="{ isActive }">
+          <v-progress-linear
+              :active="isActive"
+              color="primary"
+              height="4"
+              indeterminate
+          ></v-progress-linear>
+        </template>
 
-  <v-card-title>
-    Update profile
-  </v-card-title>
-    <v-card-text>
-      <v-form
-          @submit.prevent="updateProfile"
-      >
+        <v-card-title class="py-4 text-white bg-primary">
+          Update profile
+        </v-card-title>
+        <v-card-text>
+          <v-form
+              @submit.prevent="updateProfile"
+          >
             <Avatar v-model:path="avatar_url" @upload="updateProfile" size="10" />
             <v-text-field
                 disabled
@@ -103,19 +104,22 @@
                 label="Website"
                 prepend-icon="mdi-web"
             ></v-text-field>
-      </v-form>
+          </v-form>
 
-    </v-card-text>
-    <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn
-          color="primary"
-          :value="loading ? 'Loading ...' : 'Update'"
-          :disabled="loading"
-          @click="updateProfile"
-      >
-        Update
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+        </v-card-text>
+        <v-card-actions class="mr-2">
+          <v-spacer></v-spacer>
+          <v-btn
+              color="primary"
+              :value="loading ? 'Loading ...' : 'Update'"
+              :disabled="loading"
+              @click="updateProfile"
+              variant="flat"
+          >
+            Update
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
