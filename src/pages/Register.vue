@@ -11,6 +11,13 @@
         <v-card-text>
           <form @submit.prevent="handleSubmit">
             <v-text-field
+                label="Name"
+                v-model="formRegister.username"
+                variant="outlined"
+                prepend-icon="mdi-email"
+                required
+            ></v-text-field>
+            <v-text-field
                 label="E-mail"
                 v-model="formRegister.email"
                 variant="outlined"
@@ -21,23 +28,25 @@
                 label="Password"
                 v-model="formRegister.password"
                 variant="outlined"
-                prepend-icon="mdi-password"
+                prepend-icon="mdi-lock"
                 required
             ></v-text-field>
+
+            <v-row>
+              <v-col class="d-flex justify-center">
+                <v-btn
+                    type="submit"
+                    color="primary"
+                    :value="loading ? 'Loading' : 'Send magic link'"
+                    :disabled="loading"
+                    variant="flat"
+                >
+                  Register
+                </v-btn>
+              </v-col>
+            </v-row>
           </form>
         </v-card-text>
-        <v-card-actions class="mr-2">
-          <v-spacer></v-spacer>
-          <v-btn
-              color="primary"
-              :value="loading ? 'Loading' : 'Send magic link'"
-              :disabled="loading"
-              @click="handleSubmit"
-              variant="flat"
-          >
-            Register
-          </v-btn>
-        </v-card-actions>
       </v-card>
     </v-col>
   </v-row>
@@ -50,6 +59,7 @@ const loading = ref(false)
 const { register } = useAuthUser();
 
 const formRegister = ref ({
+  username: "",
   email: "",
   password: ""
 })

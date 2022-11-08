@@ -1,7 +1,8 @@
 <script setup>
   import { ref, toRefs, watch } from 'vue'
-  import { supabase } from '../supabase'
 
+  import useAuthUser from "../composables/useAuthUser.js";
+  const { getAvatar, storeAvatar } = useAuthUser();
   const prop = defineProps(['path', 'size'])
   const { path, size } = toRefs(prop)
 
@@ -12,7 +13,7 @@
 
   const downloadImage = async () => {
     try {
-      const { data, error } = await supabase.storage.from('avatars').download(path.value)
+       const { data, error } = await getAvatar(path.value)
       if (error) throw error
       src.value = URL.createObjectURL(data)
     } catch (error) {
@@ -32,13 +33,13 @@
       const fileExt = file.name.split('.').pop()
       const filePath = `${Math.random()}.${fileExt}`
 
-      let { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
+      const { uploadError } = await storeAvatar({filePath, file});
 
       if (uploadError) throw uploadError
       emit('update:path', filePath)
       emit('upload')
     } catch (error) {
-      alert(error.message)
+      alert(error)
     } finally {
       uploading.value = false
     }

@@ -1,19 +1,15 @@
 <script setup>
-  import {onMounted, ref, toRefs } from 'vue'
-  // import Avatar from '../components/Avatar.vue'
-
-  // const props = defineProps(['session'])
-  // const { session } = toRefs(props)
-
+  import {onMounted, ref } from 'vue'
+  import Avatar from '../components/Avatar.vue'
 
   import useAuthUser from "../composables/useAuthUser.js";
-  const { isLoggedIn, userProfile } = useAuthUser();
+  const { userProfile, update, user } = useAuthUser();
 
   const loading = ref(true)
   const username = ref('')
   const email = ref('')
   const website = ref('')
-  // const avatar_url = ref('')
+  const avatar_url = ref('')
 
   onMounted(() => {
     getProfile()
@@ -22,16 +18,13 @@
   async function getProfile() {
     try {
       loading.value = true
-      const user  = await isLoggedIn()
-      if (user) {
-        const data = await userProfile({ id: user.id })
+        const data = await userProfile(user.value.id)
         if (data) {
-          email.value = user.email
+          email.value = user.value.email
           username.value = data.username
           website.value = data.website
-          // avatar_url.value = data.avatar_url
+          avatar_url.value = data.avatar_url
         }
-      }
     } catch (error) {
       alert(error.message)
     } finally {
@@ -42,18 +35,14 @@
   async function updateProfile() {
     try {
       loading.value = true
-      // const { user } = session.value
-      //
-      // const updates = {
-      //   id: user.id,
-      //   username: username.value,
-      //   website: website.value,
-      //   // avatar_url: avatar_url.value,
-      //   updated_at: new Date(),
-      // }
-      //
-      // let { error } = await supabase.from('profiles').upsert(updates)
-
+      const updates = {
+        id: user.value.id,
+        username: username.value,
+        website: website.value,
+        avatar_url: avatar_url.value,
+        updated_at: new Date(),
+      }
+      let error = await update(updates);
       if (error) throw error
     } catch (error) {
       alert(error.message)
@@ -71,14 +60,14 @@
       <v-card
           :loading="loading">
 
-<!--        <template v-slot:loader="{ isActive }">-->
-<!--          <v-progress-linear-->
-<!--              :active="isActive"-->
-<!--              color="primary"-->
-<!--              height="4"-->
-<!--              indeterminate-->
-<!--          ></v-progress-linear>-->
-<!--        </template>-->
+        <template v-slot:loader="{ isActive }">
+          <v-progress-linear
+              :active="isActive"
+              color="primary"
+              height="4"
+              indeterminate
+          ></v-progress-linear>
+        </template>
 
         <v-card-title class="py-4 text-white bg-primary">
           Update profile
@@ -87,7 +76,7 @@
           <v-form
               @submit.prevent="updateProfile"
           >
-<!--            <Avatar v-model:path="avatar_url" @upload="updateProfile" size="10" />-->
+            <Avatar v-model:path="avatar_url" @upload="updateProfile" size="10" />
             <v-text-field
                 disabled
                 label="E-mail"
@@ -112,7 +101,6 @@
           <v-btn
               color="primary"
               :value="loading ? 'Loading ...' : 'Update'"
-              :disabled="loading"
               @click="updateProfile"
               variant="flat"
           >

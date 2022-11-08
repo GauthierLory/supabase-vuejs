@@ -2,6 +2,7 @@ import * as VueRouter from "vue-router";
 
 import HomePage from '../pages/Home.vue'
 import AccountPage from '../pages/Account.vue'
+import NotFoundPage from '../pages/NotFound.vue'
 import AuthPage from '../pages/Auth.vue'
 import RegisterPage from '../pages/Register.vue'
 import useAuthUser from "../composables/useAuthUser.js";
@@ -12,11 +13,11 @@ const routes = [
         path: '/',
         component: HomePage
     },
-    // {
-    //     name: "Me",
-    //     path: '/profile',
-    //     component: AccountPage,
-    // },
+    {
+        name: "Me",
+        path: '/profile',
+        component: AccountPage
+    },
     {
         name: "Login",
         path: '/login',
@@ -40,20 +41,23 @@ const routes = [
             await logout();
             return {path: "/login"};
         }
-    }
+    },
+    {
+        name: "NotFound",
+        path: "/notfound",
+        component: NotFoundPage
+    },
+    {
+        path: "/:wrongPath(.*)",
+        redirect: (to) => {
+            return { name: "NotFound", params: { wrongPath: to.params.wrongPath } };
+        },
+    },
 ]
 
 const router = VueRouter.createRouter({
     history: VueRouter.createWebHistory(),
-    routes, // short for `routes: routes`
+    routes
 })
-
-// router.beforeEach((to, from) => {
-//     // if (to.meta.needLoggedIn && !localStorage.getItem("isLoggedIn")) {
-//     if (!localStorage.getItem("sb-gemidcqbxyqjybbthjaq-auth-token")) {
-//         // return "/login";
-//         return "/login";
-//     }
-// })
 
 export default router;
