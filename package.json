@@ -12,6 +12,7 @@
     "@mdi/font": "5.9.55",
     "@supabase/supabase-js": "^2.0.5",
     "vue": "^3.2.41",
+    "vue-router": "^4.1.6",
     "vuetify": "^3.0.0"
   },
   "devDependencies": {

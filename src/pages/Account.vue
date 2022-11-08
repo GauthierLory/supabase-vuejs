@@ -1,15 +1,19 @@
 <script setup>
-  import { supabase } from '../supabase'
-  import { onMounted, ref, toRefs } from 'vue'
-  import Avatar from './Avatar.vue'
+  import {onMounted, ref, toRefs } from 'vue'
+  // import Avatar from '../components/Avatar.vue'
 
-  const props = defineProps(['session'])
-  const { session } = toRefs(props)
+  // const props = defineProps(['session'])
+  // const { session } = toRefs(props)
+
+
+  import useAuthUser from "../composables/useAuthUser.js";
+  const { isLoggedIn, userProfile } = useAuthUser();
 
   const loading = ref(true)
   const username = ref('')
+  const email = ref('')
   const website = ref('')
-  const avatar_url = ref('')
+  // const avatar_url = ref('')
 
   onMounted(() => {
     getProfile()
@@ -18,20 +22,15 @@
   async function getProfile() {
     try {
       loading.value = true
-      const { user } = session.value
-
-      let { data, error, status } = await supabase
-        .from('profiles')
-        .select(`username, website, avatar_url`)
-        .eq('id', user.id)
-        .single()
-
-      if (error && status !== 406) throw error
-
-      if (data) {
-        username.value = data.username
-        website.value = data.website
-        avatar_url.value = data.avatar_url
+      const user  = await isLoggedIn()
+      if (user) {
+        const data = await userProfile({ id: user.id })
+        if (data) {
+          email.value = user.email
+          username.value = data.username
+          website.value = data.website
+          // avatar_url.value = data.avatar_url
+        }
       }
     } catch (error) {
       alert(error.message)
@@ -43,17 +42,17 @@
   async function updateProfile() {
     try {
       loading.value = true
-      const { user } = session.value
-
-      const updates = {
-        id: user.id,
-        username: username.value,
-        website: website.value,
-        avatar_url: avatar_url.value,
-        updated_at: new Date(),
-      }
-
-      let { error } = await supabase.from('profiles').upsert(updates)
+      // const { user } = session.value
+      //
+      // const updates = {
+      //   id: user.id,
+      //   username: username.value,
+      //   website: website.value,
+      //   // avatar_url: avatar_url.value,
+      //   updated_at: new Date(),
+      // }
+      //
+      // let { error } = await supabase.from('profiles').upsert(updates)
 
       if (error) throw error
     } catch (error) {
@@ -66,19 +65,20 @@
 </script>
 
 <template>
+  <h1>Profile</h1>
   <v-row>
     <v-col>
       <v-card
           :loading="loading">
 
-        <template v-slot:loader="{ isActive }">
-          <v-progress-linear
-              :active="isActive"
-              color="primary"
-              height="4"
-              indeterminate
-          ></v-progress-linear>
-        </template>
+<!--        <template v-slot:loader="{ isActive }">-->
+<!--          <v-progress-linear-->
+<!--              :active="isActive"-->
+<!--              color="primary"-->
+<!--              height="4"-->
+<!--              indeterminate-->
+<!--          ></v-progress-linear>-->
+<!--        </template>-->
 
         <v-card-title class="py-4 text-white bg-primary">
           Update profile
@@ -87,11 +87,11 @@
           <v-form
               @submit.prevent="updateProfile"
           >
-            <Avatar v-model:path="avatar_url" @upload="updateProfile" size="10" />
+<!--            <Avatar v-model:path="avatar_url" @upload="updateProfile" size="10" />-->
             <v-text-field
                 disabled
                 label="E-mail"
-                v-model="session.user.email"
+                v-model="email"
                 prepend-icon="mdi-email"
             ></v-text-field>
             <v-text-field

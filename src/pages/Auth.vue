@@ -17,6 +17,13 @@
                 prepend-icon="mdi-email"
                 required
             ></v-text-field>
+            <v-text-field
+                label="Password"
+                v-model="password"
+                variant="outlined"
+                prepend-icon="mdi-password"
+                required
+            ></v-text-field>
           </form>
         </v-card-text>
         <v-card-actions class="mr-2">
@@ -36,26 +43,28 @@
   </v-row>
 </template>
 <script setup>
-  import { ref } from 'vue'
-  import { supabase } from '../supabase'
+import {ref} from 'vue'
+  import useAuthUser from "../composables/useAuthUser.js";
+import { useRouter } from "vue-router";
+
+// Use necessary composables
+const router = useRouter();
+
+  const { login } = useAuthUser();
 
   const loading = ref(false)
   const email = ref('')
+  const password = ref('')
 
   const handleLogin = async () => {
     try {
-      loading.value = true
-      const { error } = await supabase.auth.signInWithOtp({
-        email: email.value,
-      })
-      if (error) throw error
-      alert('Check your email for the login link!')
+      await login({ email: email.value, password: password.value })
+      router.push({ name: "Me" });
+      loading.value = false
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message)
       }
-    } finally {
-      loading.value = false
     }
   }
 </script>
