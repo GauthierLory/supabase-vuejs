@@ -55,6 +55,26 @@ export default function useAuthUser() {
     };
 
     /**
+     * Send user an email to reset their password
+     * (ie. support "Forgot Password?")
+     */
+    const sendPasswordRestEmail = async (email) => {
+        const { user, error } = await supabase.auth.resetPasswordForEmail(
+            email,{
+                redirectTo: 'http://localhost:5173/update-password',
+            }
+        );
+        if (error) throw error;
+        return user;
+    };
+
+    const updatePassword = async (newPassword) => {
+        const { data, error } = await supabase.auth.updateUser({ password: newPassword })
+        if (error) throw error;
+        return user;
+    }
+
+    /**
      * Update user email, password, or meta data
      */
     const update = async (data) => {
@@ -92,6 +112,8 @@ export default function useAuthUser() {
         update,
         getAvatar,
         storeAvatar,
-        userProfile
+        userProfile,
+        sendPasswordRestEmail,
+        updatePassword
     };
 }

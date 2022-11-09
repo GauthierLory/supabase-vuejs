@@ -5,6 +5,8 @@ import AccountPage from '../pages/Account.vue'
 import NotFoundPage from '../pages/NotFound.vue'
 import AuthPage from '../pages/Auth.vue'
 import RegisterPage from '../pages/Register.vue'
+import ForgotPasswordPage from '../pages/ForgotPassword.vue'
+import UpdatePassword from '../pages/UpdatePassword.vue'
 import useAuthUser from "../composables/useAuthUser.js";
 
 const routes = [
@@ -12,6 +14,16 @@ const routes = [
         name: "Home",
         path: '/',
         component: HomePage
+    },
+    {
+        name: "ForgotPassword",
+        path: "/forgotPassword",
+        component: ForgotPasswordPage,
+    },
+    {
+        name: "UpdatePassword",
+        path: "/update-password",
+        component: UpdatePassword,
     },
     {
         name: "Me",

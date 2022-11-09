@@ -41,6 +41,14 @@
                 >
                   Or sign in with Github
                 </global-button>
+                <router-link to="/forgotPassword">
+                  <global-button
+                      type="submit"
+                      :disabled="loading"
+                  >
+                    Forgot Password?
+                  </global-button>
+                </router-link>
               </v-col>
             </v-row>
           </form>
