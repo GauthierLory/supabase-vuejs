@@ -1,8 +1,10 @@
 <script setup>
-  import {onMounted, ref } from 'vue'
   import Avatar from '../components/Avatar.vue'
+  import GlobalButton from "../components/GlobalButton.vue";
 
+  import {onMounted, ref } from 'vue'
   import useAuthUser from "../composables/useAuthUser.js";
+
   const { userProfile, update, user } = useAuthUser();
 
   const loading = ref(true)
@@ -57,18 +59,7 @@
   <h1>Profile</h1>
   <v-row>
     <v-col>
-      <v-card
-          :loading="loading">
-
-        <template v-slot:loader="{ isActive }">
-          <v-progress-linear
-              :active="isActive"
-              color="primary"
-              height="4"
-              indeterminate
-          ></v-progress-linear>
-        </template>
-
+      <v-card :loading="loading" class="rounded-lg">
         <v-card-title class="py-4 text-white bg-primary">
           Update profile
         </v-card-title>
@@ -97,15 +88,17 @@
 
         </v-card-text>
         <v-card-actions class="mr-2">
-          <v-spacer></v-spacer>
-          <v-btn
-              color="primary"
-              :value="loading ? 'Loading ...' : 'Update'"
-              @click="updateProfile"
-              variant="flat"
-          >
-            Update
-          </v-btn>
+          <v-row>
+            <v-col class="d-flex justify-end">
+              <global-button
+                  type="submit"
+                  :disabled="loading"
+                  @click="updateProfile"
+              >
+                Update
+              </global-button>
+            </v-col>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-col>

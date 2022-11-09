@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="lg-6 md-6" offset="lg-3 md-6">
-      <v-card :loading="loading" class="mt-6">
+      <v-card :loading="loading" class="mt-6 rounded-lg">
         <v-card-title class="py-4 text-white bg-primary">
           Register
         </v-card-title>
@@ -34,15 +34,11 @@
 
             <v-row>
               <v-col class="d-flex justify-center">
-                <v-btn
+                <global-button
                     type="submit"
-                    color="primary"
                     :value="loading ? 'Loading' : 'Send magic link'"
                     :disabled="loading"
-                    variant="flat"
-                >
-                  Register
-                </v-btn>
+                />
               </v-col>
             </v-row>
           </form>
@@ -54,6 +50,7 @@
 <script setup>
 import { ref } from 'vue'
 import useAuthUser from "../composables/useAuthUser.js";
+import GlobalButton from "../components/GlobalButton.vue";
 
 const loading = ref(false)
 const { register } = useAuthUser();
