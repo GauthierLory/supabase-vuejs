@@ -1,6 +1,8 @@
 import useSupabase from "../composables/useSupabase.js";
 import { ref } from "vue";
 
+import { useRouter } from "vue-router";
+
 // user is set outside of the useAuthUser function
 // so that it will act as global state and always refer to a single user
 const user = ref(null);
@@ -8,20 +10,22 @@ const user = ref(null);
 export default function useAuthUser() {
     const { supabase } = useSupabase();
 
+    const router = useRouter();
     /**
      * Login with email and password
      */
     const login = async ({ email, password }) => {
         const { user, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        router.push('/')
         return user;
     };
 
     /**
      * Login with google, github, etc
      */
-    const loginWithSocialProvider = async (token) => {
-        const { user, error } = await supabase.auth.signInWithOtp({ provider });
+    const loginWithSocialProvider = async (provider) => {
+        const { user, error } = await supabase.auth.signInWithOAuth({ provider });
         if (error) throw error;
         return user;
     };

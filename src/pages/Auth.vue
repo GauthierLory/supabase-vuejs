@@ -6,7 +6,7 @@
           Log in
         </v-card-title>
         <v-card-subtitle class="text-subtitle-1 my-3">
-          Sign in via magic link with your email below
+          Sign in with your email below
         </v-card-subtitle>
         <v-card-text>
           <form @submit.prevent="handleLogin()">
@@ -25,15 +25,22 @@
                     required
                 ></v-text-field>
             <v-row>
-              <v-col class="d-flex justify-center">
+              <v-col class="d-flex justify-space-between">
                 <global-button
                     type="submit"
                     :disabled="loading"
                 />
+                <global-button
+                    type="submit"
+                    @click.prevent="handleLogin('github')"
+                    :disabled="loading"
+                    prepend-icon="mdi-github"
+                >
+                  Or sign in with Github
+                </global-button>
               </v-col>
             </v-row>
           </form>
-<!--          <a @click.prevent="handleLogin('github')">Github</a>-->
         </v-card-text>
       </v-card>
     </v-col>
@@ -59,11 +66,11 @@ const handleLogin = async (provider) => {
       provider
           ? await loginWithSocialProvider(provider)
           : await login(form.value);
-      router.push({ name: "Me" });
     } catch (error) {
       alert(error.message);
     } finally {
       loading.value = false
+      // await router.push({name: "Me"});
     }
   }
 </script>
