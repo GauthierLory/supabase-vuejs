@@ -48,8 +48,8 @@ export default function useAuthUser() {
     /**
      * Register
      */
-    const register = async ({ email, password, ...meta }) => {
-        const { user, error } = await supabase.auth.signUp({ email, password ,options: { data: meta }});
+    const register = async ({ email, password }) => {
+        const { user, error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
         return user;
     };

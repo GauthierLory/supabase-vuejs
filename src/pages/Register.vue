@@ -11,13 +11,6 @@
         <v-card-text>
           <form @submit.prevent="handleSubmit">
             <v-text-field
-                label="Name"
-                v-model="formRegister.username"
-                variant="outlined"
-                prepend-icon="mdi-email"
-                required
-            ></v-text-field>
-            <v-text-field
                 label="E-mail"
                 v-model="formRegister.email"
                 variant="outlined"
@@ -56,7 +49,6 @@ const loading = ref(false)
 const { register } = useAuthUser();
 
 const formRegister = ref ({
-  username: "",
   email: "",
   password: ""
 })
