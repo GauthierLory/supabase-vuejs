@@ -8,6 +8,9 @@
         <v-card-subtitle class="text-subtitle-1 my-3">
           Sign in with your email below
         </v-card-subtitle>
+        <v-card-text v-if="errorForm">
+          <v-alert :icon="false" :text="errorForm" type="error" />
+        </v-card-text>
         <v-card-text>
           <form @submit.prevent="handleLogin()">
                 <v-text-field
@@ -55,6 +58,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const { login, loginWithSocialProvider } = useAuthUser();
 
+let errorForm = ref(null)
   const loading = ref(false)
   const form = ref({
     email: "",
@@ -67,7 +71,7 @@ const handleLogin = async (provider) => {
           ? await loginWithSocialProvider(provider)
           : await login(form.value);
     } catch (error) {
-      alert(error.message);
+      errorForm.value = error.message
     } finally {
       loading.value = false
       // await router.push({name: "Me"});
